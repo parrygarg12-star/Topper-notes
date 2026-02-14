@@ -8,16 +8,8 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #f4f1eb, #ebe6dc, #e6e0d6);
-      background-size: 300% 300%;
-      animation: gradientFlow 12s ease infinite;
+      background: linear-gradient(135deg, #f4f1eb, #ebe6dc);
       color: #1a1a1a;
-    }
-
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     .container {
@@ -31,45 +23,23 @@
       font-weight: 800;
       text-align: center;
       margin-bottom: 8px;
-      letter-spacing: 2px;
     }
 
     .subtitle {
       text-align: center;
       color: #666;
-      margin-bottom: 30px;
-      font-size: 15px;
-    }
-
-    .countdown {
-      text-align: center;
-      font-weight: 600;
       margin-bottom: 40px;
-      font-size: 16px;
-      color: #1f7a5c;
-    }
-
-    .search {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      border: none;
-      margin-bottom: 20px;
-      font-size: 15px;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     .card {
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.75);
       backdrop-filter: blur(15px);
       padding: 28px;
       border-radius: 22px;
       margin-bottom: 18px;
       cursor: pointer;
       transition: all 0.25s ease;
-      border: 1px solid rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.6);
       font-size: 18px;
       font-weight: 600;
     }
@@ -79,37 +49,10 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.08);
     }
 
-    .add-btn, .reset-btn {
-      width: 100%;
-      padding: 15px;
-      border-radius: 16px;
-      border: none;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 15px;
-      transition: 0.3s;
-    }
-
-    .add-btn {
-      background: #1f7a5c;
-      color: white;
-    }
-
-    .add-btn:hover {
-      background: #166c50;
-    }
-
-    .reset-btn {
-      background: transparent;
-      border: 1px solid #d8d2c7;
-      color: #a94442;
-    }
-
     #viewer {
       display: none;
-      position: relative;
       height: 85vh;
+      position: relative;
     }
 
     iframe {
@@ -117,7 +60,6 @@
       height: 100%;
       border: none;
       border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
       display: none;
     }
 
@@ -127,7 +69,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 16px;
-      font-weight: 500;
       color: #555;
     }
 
@@ -146,20 +87,13 @@
 <div class="container">
 
   <h1>Topper Vault</h1>
-  <div class="subtitle">A focused academic command center.</div>
-
-  <div class="countdown" id="countdown"></div>
-
-  <input type="text" class="search" placeholder="Search subjects..." oninput="filterSubjects(this.value)">
-
-  <button class="add-btn" onclick="addSubject()">+ Add Subject</button>
-  <button class="reset-btn" onclick="resetVault()">Reset Vault</button>
+  <div class="subtitle">Structured academic system.</div>
 
   <div id="subjects"></div>
 
   <div id="viewer">
     <div class="back" onclick="goBack()">← Back</div>
-    <div class="loading" id="loading">Opening subject…</div>
+    <div class="loading" id="loading">Opening folder…</div>
     <iframe id="driveFrame"></iframe>
   </div>
 
@@ -167,63 +101,54 @@
 
 <script>
 
-const examDate = new Date("2026-06-01");
+/* ---------- STRUCTURE ---------- */
 
-function updateCountdown() {
-  const today = new Date();
-  const diff = examDate - today;
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  document.getElementById("countdown").innerText =
-    days > 0 ? "Sem ends – " + days + " days left"
-             : "Exam Day Has Arrived.";
-}
-updateCountdown();
-
-let subjects = JSON.parse(localStorage.getItem("subjects")) || {
-  "Horticulture": "1jqDXfY6FR80ywabGL-72vi3C72F8KaAb",
-  "Entomology": "1LdnshWQjMRRe4JwuasV2Iagj4s0N_orU"
+let subjects = {
+  "Horticulture": {
+    "Notes": "1bnHgaot9b-W-wk5czRGiatvXEDA40Rvj",
+    "PYQ": "1lXuJwo8mlmi_9SF-F2b-xs5wDfaCDyrS"
+  }
 };
 
-function saveSubjects() {
-  localStorage.setItem("subjects", JSON.stringify(subjects));
-}
+/* ---------- RENDER SUBJECTS ---------- */
 
-function renderSubjects(filter = "") {
+function renderSubjects() {
   const container = document.getElementById("subjects");
   container.innerHTML = "";
 
   Object.keys(subjects).forEach(subject => {
-    if (subject.toLowerCase().includes(filter.toLowerCase())) {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerText = subject;
-      card.onclick = () => openDrive(subjects[subject]);
-      container.appendChild(card);
-    }
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = subject;
+    card.onclick = () => renderSubFiles(subject);
+    container.appendChild(card);
   });
 }
-renderSubjects();
 
-function filterSubjects(value) {
-  renderSubjects(value);
+/* ---------- RENDER SUBFILES ---------- */
+
+function renderSubFiles(subject) {
+  const container = document.getElementById("subjects");
+  container.innerHTML = "";
+
+  const backCard = document.createElement("div");
+  backCard.className = "card";
+  backCard.innerText = "← Back to Subjects";
+  backCard.onclick = renderSubjects;
+  container.appendChild(backCard);
+
+  const subFiles = subjects[subject];
+
+  Object.keys(subFiles).forEach(name => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = name;
+    card.onclick = () => openDrive(subFiles[name]);
+    container.appendChild(card);
+  });
 }
 
-function addSubject() {
-  const name = prompt("Enter subject name:");
-  const id = prompt("Enter Google Drive folder ID:");
-  if (name && id) {
-    subjects[name] = id;
-    saveSubjects();
-    renderSubjects();
-  }
-}
-
-function resetVault() {
-  if (confirm("Reset entire vault?")) {
-    localStorage.clear();
-    location.reload();
-  }
-}
+/* ---------- OPEN DRIVE ---------- */
 
 function openDrive(folderId) {
   const viewer = document.getElementById("viewer");
@@ -231,22 +156,13 @@ function openDrive(folderId) {
   const loading = document.getElementById("loading");
 
   document.getElementById("subjects").style.display = "none";
-  document.querySelector(".search").style.display = "none";
-  document.querySelector(".add-btn").style.display = "none";
-  document.querySelector(".reset-btn").style.display = "none";
-
   viewer.style.display = "block";
 
-  // Hide iframe until fully loaded
   iframe.style.display = "none";
   loading.style.display = "block";
 
-  iframe.src = "";
-
-  setTimeout(() => {
-    iframe.src =
-      "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
-  }, 150);
+  iframe.src =
+    "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
 
   iframe.onload = function() {
     loading.style.display = "none";
@@ -254,13 +170,14 @@ function openDrive(folderId) {
   };
 }
 
+/* ---------- BACK ---------- */
+
 function goBack() {
   document.getElementById("viewer").style.display = "none";
   document.getElementById("subjects").style.display = "block";
-  document.querySelector(".search").style.display = "block";
-  document.querySelector(".add-btn").style.display = "block";
-  document.querySelector(".reset-btn").style.display = "block";
 }
+
+renderSubjects();
 
 </script>
 

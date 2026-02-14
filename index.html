@@ -66,16 +66,9 @@
 
 <script>
   const subjects = {
-    "Horticulture": [
-      "subjects/horticulture/note1.jpg",
-      "subjects/horticulture/note2.jpg"
-    ],
-    "Soil Science": [
-      "subjects/soil-science/note1.jpg"
-    ],
-    "Plant Breeding": [
-      "subjects/plant-breeding/note1.jpg"
-    ]
+    "Horticulture": "horticulture.html",
+    "Soil Science": "soil-science.html",
+    "Plant Breeding": "plant-breeding.html"
   };
 
   const container = document.getElementById("content");
@@ -84,33 +77,22 @@
     const section = document.createElement("div");
     section.className = "subject";
 
-    const title = document.createElement("h2");
-    title.textContent = subject;
+    const button = document.createElement("div");
+    button.style.padding = "20px";
+    button.style.background = "#fff";
+    button.style.borderRadius = "12px";
+    button.style.cursor = "pointer";
+    button.style.marginBottom = "15px";
+    button.style.boxShadow = "0 4px 10px rgba(0,0,0,0.05)";
+    button.innerText = subject;
 
-    const grid = document.createElement("div");
-    grid.className = "grid";
+    button.onclick = () => {
+      window.location.href = subjects[subject];
+    };
 
-    subjects[subject].forEach(src => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.onclick = () => openViewer(src);
-      grid.appendChild(img);
-    });
-
-    section.appendChild(title);
-    section.appendChild(grid);
+    section.appendChild(button);
     container.appendChild(section);
   });
-
-  function openViewer(src) {
-    document.getElementById("viewer-img").src = src;
-    document.getElementById("viewer").style.display = "flex";
-  }
-
-  function closeViewer() {
-    document.getElementById("viewer").style.display = "none";
-  }
 </script>
-
 </body>
 </html>

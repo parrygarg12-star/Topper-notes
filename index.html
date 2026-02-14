@@ -17,7 +17,7 @@
       text-align: center;
       font-size: 26px;
       font-weight: 600;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       background: #111111;
       border-bottom: 1px solid #1f1f1f;
     }
@@ -73,6 +73,47 @@
 
 <body>
 
+<header>TOPPER VAULT</header>
+
+<div class="subjects" id="subjects"></div>
+
+<div id="viewer">
+  <div class="back" onclick="goBack()">← Back</div>
+  <iframe id="driveFrame"></iframe>
+</div>
+
+<script>
+const subjects = {
+  "Horticulture": "1jqDXfY6FR80ywabGL-72vi3C72F8KaAb",
+  "Entomology": "1LdnshWQjMRRe4JwuasV2Iagj4s0N_orU"
+};
+
+const container = document.getElementById("subjects");
+
+Object.keys(subjects).forEach(subject => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerText = subject;
+  card.onclick = () => openDrive(subjects[subject]);
+  container.appendChild(card);
+});
+
+function openDrive(folderId) {
+  document.getElementById("subjects").style.display = "none";
+  document.getElementById("viewer").style.display = "block";
+
+  document.getElementById("driveFrame").src =
+    "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
+}
+
+function goBack() {
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("subjects").style.display = "block";
+}
+</script>
+
+</body>
+</html>
 <header>TOPPER VAULT</header>
 
 <div class="subjects" id="subjects"></div>

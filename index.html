@@ -141,14 +141,14 @@ if ("serviceWorker" in navigator) {
 }
 
 /* ---------- EXAM COUNTDOWN ---------- */
-const examDate = new Date("2026-08-01");
+const examDate = new Date("2026-06-01");
 
 function updateCountdown() {
   const today = new Date();
   const diff = examDate - today;
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
   document.getElementById("countdown").innerText =
-    days > 0 ? "NABARD Exam – " + days + " days left"
+    days > 0 ? "Sem ends – " + days + " days left"
              : "Exam Day Has Arrived.";
 }
 

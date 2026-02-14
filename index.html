@@ -7,42 +7,44 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f0f0f;
-      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f2ec;
+      color: #1a1a1a;
     }
 
-    header {
-      padding: 25px;
-      text-align: center;
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      background: #111111;
-      border-bottom: 1px solid #1f1f1f;
-    }
-
-    .subjects {
-      padding: 30px 20px;
-      max-width: 700px;
+    .container {
+      max-width: 800px;
       margin: auto;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 50px;
+      font-size: 16px;
     }
 
     .card {
-      background: #151515;
-      padding: 22px;
-      margin-bottom: 18px;
-      border-radius: 16px;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 20px;
       cursor: pointer;
-      border: 1px solid #1f1f1f;
-      transition: 0.25s ease;
-      font-size: 18px;
+      transition: all 0.25s ease;
+      border: 1px solid #e6e2db;
     }
 
     .card:hover {
-      background: #1c1c1c;
-      border: 1px solid #333333;
-      transform: translateY(-3px);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.08);
     }
 
     #viewer {
@@ -54,32 +56,37 @@
       width: 100%;
       height: 100%;
       border: none;
-      background: #000;
     }
 
     .back {
-      padding: 18px;
+      margin-bottom: 15px;
       cursor: pointer;
+      color: #666;
       font-size: 14px;
-      color: #aaaaaa;
-      border-bottom: 1px solid #1f1f1f;
     }
 
     .back:hover {
-      color: white;
+      color: black;
     }
   </style>
 </head>
 
 <body>
 
-<header>TOPPER VAULT</header>
+<div class="container">
 
-<div class="subjects" id="subjects"></div>
+  <h1>Topper Vault</h1>
+  <div class="subtitle">
+    A distraction-free academic dashboard.
+  </div>
 
-<div id="viewer">
-  <div class="back" onclick="goBack()">← Back</div>
-  <iframe id="driveFrame"></iframe>
+  <div id="subjects"></div>
+
+  <div id="viewer">
+    <div class="back" onclick="goBack()">← Back</div>
+    <iframe id="driveFrame"></iframe>
+  </div>
+
 </div>
 
 <script>
@@ -112,102 +119,5 @@ function goBack() {
 }
 </script>
 
-</body>
-</html>
-<header>TOPPER VAULT</header>
-
-<div class="subjects" id="subjects"></div>
-
-<div id="viewer">
-  <div class="back" onclick="goBack()">← Back</div>
-  <iframe id="driveFrame"></iframe>
-</div>
-
-<script>
-const subjects = {
-  "Horticulture": "1jqDXfY6FR80ywabGL-72vi3C72F8KaAb",
-  "Entomology": "1LdnshWQjMRRe4JwuasV2Iagj4s0N_orU"
-};
-
-const container = document.getElementById("subjects");
-
-Object.keys(subjects).forEach(subject => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerText = subject;
-
-  card.onclick = () => openDrive(subjects[subject]);
-
-  container.appendChild(card);
-});
-
-function openDrive(folderId) {
-  document.getElementById("subjects").style.display = "none";
-  document.getElementById("viewer").style.display = "block";
-
-  document.getElementById("driveFrame").src =
-    "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
-}
-
-function goBack() {
-  document.getElementById("viewer").style.display = "none";
-  document.getElementById("subjects").style.display = "block";
-}
-</script>
-
-</body>
-</html>  "Soil Science": "",
-  "Plant Breeding": ""
-};
-
-const container = document.getElementById("subjects");
-
-Object.keys(subjects).forEach(subject => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerText = subject;
-
-  card.onclick = () => openDrive(subjects[subject]);
-
-  container.appendChild(card);
-});
-
-function openDrive(folderId) {
-  document.getElementById("subjects").style.display = "none";
-  document.getElementById("viewer").style.display = "block";
-
-  document.getElementById("driveFrame").src =
-    "https://drive.google.com/embeddedfolderview?id=" + folderId + "#list";
-}
-
-function goBack() {
-  document.getElementById("viewer").style.display = "none";
-  document.getElementById("subjects").style.display = "block";
-}
-</script>
-
-</body>
-</html>
-  Object.keys(subjects).forEach(subject => {
-    const section = document.createElement("div");
-    section.className = "subject";
-
-    const button = document.createElement("div");
-    button.style.padding = "20px";
-    button.style.background = "#fff";
-    button.style.borderRadius = "12px";
-    button.style.cursor = "pointer";
-    button.style.marginBottom = "15px";
-    button.style.boxShadow = "0 4px 10px rgba(0,0,0,0.05)";
-    button.innerText = subject;
-
-    button.onclick = () => {
-      window.location.href = subjects[subject];
-    };
-
-    section.appendChild(button);
-    container.appendChild(section);
-  });
-</script>
 </body>
 </html>

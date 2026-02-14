@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Topper Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .subject {
+      margin-bottom: 50px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .grid img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .grid img:hover {
+      transform: scale(1.03);
+    }
+
+    .viewer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>📚 Topper Vault</h1>
+
+<div id="content"></div>
+
+<div class="viewer" id="viewer" onclick="closeViewer()">
+  <img id="viewer-img">
+</div>
+
+<script>
+  const subjects = {
+    "Horticulture": [
+      "subjects/horticulture/note1.jpg",
+      "subjects/horticulture/note2.jpg"
+    ],
+    "Soil Science": [
+      "subjects/soil-science/note1.jpg"
+    ],
+    "Plant Breeding": [
+      "subjects/plant-breeding/note1.jpg"
+    ]
+  };
+
+  const container = document.getElementById("content");
+
+  Object.keys(subjects).forEach(subject => {
+    const section = document.createElement("div");
+    section.className = "subject";
+
+    const title = document.createElement("h2");
+    title.textContent = subject;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    subjects[subject].forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.onclick = () => openViewer(src);
+      grid.appendChild(img);
+    });
+
+    section.appendChild(title);
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+
+  function openViewer(src) {
+    document.getElementById("viewer-img").src = src;
+    document.getElementById("viewer").style.display = "flex";
+  }
+
+  function closeViewer() {
+    document.getElementById("viewer").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
